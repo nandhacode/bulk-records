@@ -27,7 +27,6 @@ The server application receives the data from the client, validates the request 
 
 ---
 
-![Project Folder Structure](docs/folder_structure.png)
 <img src="https://github.com/nandhacode/bulk-records/blob/master/docs/app_structure.png" alt="anirban12345" height="150" width="150" />
 
 # Database Migration  
