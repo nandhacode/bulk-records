@@ -27,7 +27,7 @@ The server application receives the data from the client, validates the request 
 
 ---
 
-![Project Folder Structure](docs/folder_structure.png)
+![Project Folder Structure](docs/folder_structure.webp)
 
 # Database Migration  
 
