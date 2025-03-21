@@ -1,136 +1,165 @@
-This project consists of two Django Project:
+# Django CSV Upload and Validation System
 
-Client Project Application – A frontend for uploading CSV files, validating and checking for duplicates, and sending valid data to the server application.
-Server Project Application – Receives the data from the client, validates the request using decorators and data classes, and attempts to insert bulk employee records into the database.
-Security is managed in the server application using JWT (JSON Web Token) authentication to secure API endpoints.
+This project consists of two Django applications:
 
+## 1. Client Project Application
+The client application provides a frontend for uploading CSV files. It validates the uploaded files, checks for duplicates, and sends the valid data to the server application.
 
-bulk-records/
-│
-├── env-bulk/   # Project environment file
-│
-├── upload_records/    # Client project folder
-│   ├── employee    # Client app for uploading CSV file
-│   │   ├── templates/
-│   │   │   └── upload_csv.html    # Template for uploading CSV files
-│   │   ├── admin.py
-│   │   ├── apps.py
-│   │   ├── decorators.py    # Decorators file for validate the request from client call
-│   │   ├── forms.py   # Form field for the upload screen
-│   │   ├── models.py    # Model for create DB and access the data from DB using ORM
-│   │   ├── tests.py
-│   │   ├── urls.py    # URLs for To specifi the endpoint of the View function
-│   │   └── views.py   # View for To create API function with business and validation logic 
-│   ├── upload_records
-│   │   ├── __init__.py
-│   │   ├── asgi.py
-│   │   ├── settings.py   # Settings for django related configuration
-│   │   ├── urls.py
-│   │   └── wsgi.py
-│   ├── .env    # To maintain the credentials details
-│   └── manage.py
-│
-├── records_management/          # Server project folder
-│   ├── read_records    # Server app for bulk creation with validation.
-│   │   ├── __init__.py
-│   │   ├── admin.py
-│   │   ├── apps.py
-│   │   ├── dataclasses.py   # Data class for to specifi the required field with the give data type format.
-│   │   ├── decorators.py   # Decorators file for validate the request from client call
-│   │   ├── forms.py    # Form field for the upload screen
-│   │   ├── models.py    # Model for create DB and access the data from DB using ORM
-│   │   ├── serializers.py
-│   │   ├── tests.py
-│   │   ├── urls.py    # URLs for To specifi the endpoint of the View function
-│   │   └── views.py    # View for To create API function with business and validation logic
-│   ├── records_management
-│   │   ├── __init__.py
-│   │   ├── asgi.py
-│   │   ├── settings.py   # Settings for django related configuration
-│   │   ├── urls.py
-│   │   └── wsgi.py
-│   └── manage.py
-│
-└── requirements.txt
+### Key Features:
+- **CSV File Upload**: Allows users to upload employee data in CSV format.
+- **Duplicate Check**: Filters out records with duplicate `emp_id` or `email`.
+- **Validation**: Validates the CSV data before sending it to the server application.
 
------------------------------------------------------------------------------------------------------------
-Database Migration 
+---
 
+## 2. Server Project Application
+The server application receives the data from the client, validates the request using custom decorators and data classes, and attempts to insert the bulk employee records into the database.
+
+### Key Features:
+- **Request Validation**: Validates the structure of the incoming request using decorators and data classes.
+- **Bulk Insert**: Supports the bulk insertion of employee records into the database using Django ORM.
+- **Security**: The server application uses **JWT (JSON Web Token)** authentication to secure API endpoints.
+
+---
+
+## Security
+- **JWT Authentication**: The server application is protected by JWT authentication. Only clients with valid JWT tokens are authorized to make requests to the server.
+
+---
+
+![Project Folder Structure](docs/folder_structure.png)
+
+# Database Migration  
+
+To apply database migrations, run the following commands:  
+
+```bash
 python manage.py makemigrations
 python manage.py migrate
------------------------------------------------------------------------------------------------------------
 
-Client Application
---- Overview
+
+# Client Application
+
+## Overview  
 The client application allows users to upload CSV files containing employee data. The application reads the file, checks for duplicate entries, and sends valid records to the server application.
 
---- Steps to Use Client Application:
-1. Go to the client application page after client application (e.g., http://127.0.0.1:8000/upload/).
+## Steps to Use Client Application:
+1. Go to the client application page (e.g., [http://127.0.0.1:8000/upload/](http://127.0.0.1:8000/upload/)).
 2. Select a CSV file for upload and submit it.
-3. The CSV file will be read, and duplicate entries based on employee emp_id or email will be filtered.
+3. The CSV file will be read, and duplicate entries based on employee `emp_id` or `email` will be filtered.
 4. If the file has valid records, they will be sent to the server application via an API call.
 
---- Key Features:
-* File Upload: Supports CSV file uploads with POST method.
-* Duplicate Check: Validates records and removes duplicates based on emp_id and email.
-* Validation: Displays success or error messages after processing the CSV.
+## Key Features:
+- **File Upload**: Supports CSV file uploads with POST method.
+- **Duplicate Check**: Validates records and removes duplicates based on `emp_id` and `email`.
+- **Validation**: Displays success or error messages after processing the CSV.
 
 
-Installation and Setup for Client Application:
-1. Install required dependencies:
-    Step 1. Navigate to bulk-records folder
-    Step 2. Run the command to install required dependencies file (pip install -r requirements.txt)
+# Installation and Setup for Client Application
 
-2. Navigate to the client project folder (e.g., /bulk-records/upload_records/) and Run the command to start the client project (py manage.py runserver 0.0.0.0:8000)
+## 1. Install Required Dependencies:
+- Navigate to the `bulk-records` folder.
+- Run the command to install the required dependencies:  
+  ```bash
+  pip install -r requirements.txt
 
-3. API list
-Note: Before trigger the client project API calls, Please ensure the server application should run.
-    1. http://127.0.0.1:8000/upload/ - Use this API endpoint to create an Access Token. After successfully created it will redirect to http://127.0.0.1:8000/upload/csv/ .
+## 2. Start the Client Project:
+- Navigate to the client project folder (e.g., `/bulk-records/upload_records/`):
+  ```bash
+  cd bulk-records/upload_records
 
-        Note: Befor call this endpoint http://127.0.0.1:8000/upload/. Try to create the superuser for the client application and add the username and password credentials to this path (e.g., /bulk-records/upload_records/.env)
+- Run the command to start the client project:
+  ```bash
+  py manage.py runserver 0.0.0.0:8000
 
-    2. http://127.0.0.1:8000/upload/csv/ From this endpoint we can upload the employee file with csv format. It will validate the file columns format and dublicate records. Finally it will trigger the server application API with the valid data to store in the employee database.    
+## 3. API List
+**Note:** Before triggering the client project API calls, ensure that the server application is running.
 
-Note: Already added the client app name in the settings.py
+### 1. Authentication & File Upload
+- **Endpoint:**  http://127.0.0.1:8000/upload/
+- This API endpoint is used to create an Access Token.
+- After successfully creating the token, it will redirect to:
 
+  http://127.0.0.1:8000/upload/csv/
 
------------------------------------------------------------------------------------------------------------
+  - **Important:** Before calling this endpoint (`http://127.0.0.1:8000/upload/`), create a superuser for the client application.  
+  - Add the username and password credentials in the `.env` file located at:
 
-Server Application
---- Overview
-The server application receives requests from the client application, validates the received data using decorators and dataclasses, and attempts to insert the records into the database using Django's ORM.
+    /bulk-records/upload_records/.env
 
-Steps to Use Server Application:
-1. The server waits for POST requests from the client application containing valid employee data.
-2. The incoming request is validated using a custom decorator to check the structure of the data (e.g., checking if emp_id, name, email, etc. are present and correct).
-3. The data is validated by a data class that ensures the correct data types and formats.
+### 2. Employee CSV Upload
+- **Endpoint:**  http://127.0.0.1:8000/upload/csv/
+
+- This API allows uploading an employee CSV file.
+- It validates:
+  - CSV file column format.
+  - Duplicate records.
+- After validation, it triggers the server application API to store valid data in the employee database.
+
+**Note:** The client app name is already added in the `settings.py` file.
+
+# Server Application
+
+## Overview
+The server application receives requests from the client application, validates the received data using decorators and dataclasses, and attempts to insert the records into the database using Django\'s ORM.
+
+## Steps to Use Server Application:
+1. The server waits for `POST` requests from the client application containing valid employee data.
+2. The incoming request is validated using a custom decorator to check the structure of the data  
+   (e.g., verifying if `emp_id`, `name`, `email`, etc., are present and correctly formatted).
+3. The data is further validated by a data class to ensure correct data types and formats.
 4. Once validated, the server inserts the employee records into the database using Django ORM in bulk.
 
---- Key Features:
-* JWT Authentication: API endpoints are protected using JWT tokens to ensure only authorized clients can access them.
-* Bulk Insert: The application supports bulk insertion of employee records into the database for efficiency.
-* Request Validation: A decorator is used to ensure the incoming data is properly validated before proceeding with the database insertion.
+## Key Features:
+- **JWT Authentication**: API endpoints are protected using JWT tokens to ensure only authorized clients can access them.
+- **Bulk Insert**: The application supports bulk insertion of employee records into the database for efficiency.
+- **Request Validation**: A decorator is used to ensure the incoming data is properly validated before proceeding with the database insertion.
 
---- Security (JWT):
-* The server API uses JWT (JSON Web Token) authentication to protect API endpoints. Clients need to pass a valid JWT token in the headers of their requests.
-* Generate a JWT Token: Authentication middleware validates the JWT token in the headers of the request.
-Authorization: The server verifies that the token is valid before processing the request.
+## Security (JWT):
+- The server API uses **JWT (JSON Web Token) authentication** to protect API endpoints. Clients need to pass a valid JWT token in the headers of their requests.
+- **Generate a JWT Token**: Authentication middleware validates the JWT token in the headers of the request.
+- **Authorization**: The server verifies that the token is valid before processing the request.
+
+# Installation and Setup for Server Application
+
+## 1. Install Required Dependencies:
+- Navigate to the `bulk-records` folder:
+  ```bash
+  cd bulk-records
+
+- Run the command to install the required dependencies:
+  ```bash
+  pip install -r requirements.txt
+
+## 2. Start the Server Project:
+- Navigate to the server project folder (e.g., `/bulk-records/records_management/`):
+  ```bash
+  cd bulk-records/records_management
+
+- Run the command to start the server project:
+  ```bash
+  py manage.py runserver 0.0.0.0:8080
+
+**Note:** Already added the server app name, DRF, and JWT configuration in the `settings.py` file.
 
 
-Installation and Setup for Server Application:
-1. Install required dependencies:
-    Step 1. Navigate to bulk-records folder
-    Step 2. Run the command to install required dependencies file (pip install -r requirements.txt)
+# JWT Authentication
 
-2. Navigate to the client project folder (e.g., /bulk-records/records_management/) and Run the command to start the server project (py manage.py runserver 0.0.0.0:8080)
+The server API uses **JWT (JSON Web Token)** for securing API endpoints.  
+To interact with the server\'s API, clients must pass a valid JWT token in the request headers.
 
-Note: Already added the server app name, DRF, and JWT configuration in the settings.py
+## JWT Authentication Flow:
 
+1. **Client Requests Token**  
+   - The client sends a `POST` request to the server with valid credentials to receive a JWT token.
 
---- JWT Authentication
-The server API uses JWT for securing API endpoints. To interact with the server's API, clients must pass a valid JWT token in the request headers.
+2. **Server Validates Credentials**  
+   - The server verifies the credentials, generates a token, and returns it to the client.
 
---- Example of JWT Authentication Flow:
-* Client Requests Token: Client sends a POST request to the server with valid credentials to receive a JWT token.
-* Server Validates Credentials: The server generates a token and returns it to the client.
-* Client Sends Token with API Requests: For all subsequent API requests, the client includes the JWT token in the Authorization header: Authorization: Bearer <JWT_Token>
+3. **Client Sends Token with API Requests**  
+   - For all subsequent API requests, the client includes the JWT token in the request headers:
+     ```
+     Authorization: Bearer <JWT_Token>
+     ```
+
+This ensures secure access to the API and prevents unauthorized usage.
