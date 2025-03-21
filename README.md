@@ -36,7 +36,7 @@ To apply database migrations, run the following commands:
 ```bash
 python manage.py makemigrations
 python manage.py migrate
-
+```
 
 # Client Application
 
@@ -62,15 +62,18 @@ The client application allows users to upload CSV files containing employee data
 - Run the command to install the required dependencies:  
   ```bash
   pip install -r requirements.txt
+  ```
 
 ## 2. Start the Client Project:
 - Navigate to the client project folder (e.g., `/bulk-records/upload_records/`):
   ```bash
   cd bulk-records/upload_records
+  ```
 
 - Run the command to start the client project:
   ```bash
   py manage.py runserver 0.0.0.0:8000
+  ```
 
 ## 3. API List
 **Note:** Before triggering the client project API calls, ensure that the server application is running.
@@ -126,19 +129,23 @@ The server application receives requests from the client application, validates 
 - Navigate to the `bulk-records` folder:
   ```bash
   cd bulk-records
+  ```
 
 - Run the command to install the required dependencies:
   ```bash
   pip install -r requirements.txt
+  ```
 
 ## 2. Start the Server Project:
 - Navigate to the server project folder (e.g., `/bulk-records/records_management/`):
   ```bash
   cd bulk-records/records_management
+  ```
 
 - Run the command to start the server project:
   ```bash
   py manage.py runserver 0.0.0.0:8080
+  ```
 
 **Note:** Already added the server app name, DRF, and JWT configuration in the `settings.py` file.
 
